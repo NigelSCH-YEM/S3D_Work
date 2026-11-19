@@ -60,7 +60,7 @@ public:
 	}
 };
 
-// Lab 3 (pre-Thursday the 19th at 8am)
+// Lab 3 (pre-Thursday the 19th at 8am)  --MISSED--
 class Demo3 : public Demo
 {
 public:
@@ -95,10 +95,68 @@ public:
 class Demo4 : public Demo
 {
 public:
+	std::vector<Vector3> triangle_vertices;
+	std::vector<Vector3> plane_vertices;
+	std::vector<uint16_t> plane_indices;
+
+	S3D_Mesh sphere;
+
+	void Load(S3D_Renderer* renderer) final
+	{
+		triangle_vertices.resize(3);
+		triangle_vertices[0] = { 0.0f, 0.5f, 0.0f };
+		triangle_vertices[1] = { -0.5f, -0.5f, 0.0f };
+		triangle_vertices[2] = { 0.5f, -0.5f, 0.0f };
+
+		plane_vertices.resize(4);
+		plane_vertices[0] = { 0.75f,  0.75f, 0.0f };	// top-right
+		plane_vertices[1] = { -0.75f,  0.75f, 0.0f };	// top-left
+		plane_vertices[2] = { -0.75f, -0.75f, 0.0f };	// bottom-left
+		plane_vertices[3] = { 0.75f, -0.75f, 0.0f };	// bottom-right
+
+		plane_indices.resize(6);
+		plane_indices[0] = 0;
+		plane_indices[1] = 1;
+		plane_indices[2] = 2;
+		plane_indices[3] = 0;
+		plane_indices[4] = 2;
+		plane_indices[5] = 3;
+
+		S3D_LoadMeshSphere(&sphere);
+		TraceLog(LOG_INFO, "RENDER THIS SPHERE");
+	}
+
 	void Update(S3D_Renderer* renderer) final
 	{
-		S3D_ClearColor(renderer, MAGENTA);
+		S3D_ClearColor(renderer, BLACK);
+		//S3D_DrawTriangleWireframes(renderer, triangle_vertices[0], triangle_vertices[1], triangle_vertices[2], RED);
 
-		
+		/*for (size_t i = 0; i < plane_indices.size(); i += 3)
+		{
+			uint16_t index0 = plane_indices[i + 0];
+			uint16_t index1 = plane_indices[i + 1];
+			uint16_t index2 = plane_indices[i + 2];
+
+
+			Vector3 ndc0 = plane_vertices[index0];
+			Vector3 ndc1 = plane_vertices[index1];
+			Vector3 ndc2 = plane_vertices[index2];
+
+			S3D_DrawTriangleWireframes(renderer, ndc0, ndc1, ndc2, RED);
+		}*/
+		for (size_t i = 0; i < sphere.indices.size(); i += 3)
+		{
+			uint16_t index0 = sphere.indices[i + 0];
+			uint16_t index1 = sphere.indices[i + 1];
+			uint16_t index2 = sphere.indices[i + 2];
+
+
+			Vector3 ndc0 = sphere.positions[index0];
+			Vector3 ndc1 = sphere.positions[index1];
+			Vector3 ndc2 = sphere.positions[index2];
+
+			S3D_DrawTriangleWireframes(renderer, ndc0, ndc1, ndc2, BLUE);
+		}
 	}
+	
 };
