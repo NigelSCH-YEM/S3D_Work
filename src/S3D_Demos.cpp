@@ -144,16 +144,21 @@ public:
 
 			S3D_DrawTriangleWireframes(renderer, ndc0, ndc1, ndc2, RED);
 		}*/
+
+		Matrix rotation = MatrixRotateY(100.0f * GetTime() * DEG2RAD);
 		for (size_t i = 0; i < sphere.indices.size(); i += 3)
 		{
 			uint16_t index0 = sphere.indices[i + 0];
 			uint16_t index1 = sphere.indices[i + 1];
 			uint16_t index2 = sphere.indices[i + 2];
 
-
 			Vector3 ndc0 = sphere.positions[index0];
 			Vector3 ndc1 = sphere.positions[index1];
 			Vector3 ndc2 = sphere.positions[index2];
+
+			ndc0 *= rotation;
+			ndc1 *= rotation;
+			ndc2 *= rotation;
 
 			S3D_DrawTriangleWireframes(renderer, ndc0, ndc1, ndc2, BLUE);
 		}
